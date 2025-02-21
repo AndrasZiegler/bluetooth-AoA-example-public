@@ -6,6 +6,9 @@ on:
       sonar_quality_gate:
         description: 'SonarQube Quality Gate Result'
         required: true
+      sonar_project_details:
+        description: 'SonarQube Project Details'
+        required: false
   repository_dispatch:
     types: [trigger-from-jenkins]
 
@@ -15,6 +18,9 @@ jobs:
     steps:
       - name: Check SonarQube Quality Gate Result
         run: |
+          if [ -n "${{ github.event.inputs.sonar_project_details }}" ]; then
+            echo "SonarQube Project Details: ${{ github.event.inputs.sonar_project_details }}"
+          fi
           if [ "${{ github.event.inputs.sonar_quality_gate }}" == "failed" ]; then
             echo "Quality Gate failed"
             exit 1
