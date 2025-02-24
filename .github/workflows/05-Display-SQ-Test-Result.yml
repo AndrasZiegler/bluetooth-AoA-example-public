@@ -28,6 +28,7 @@ jobs:
           exit 1
         else
           echo "Quality Gate passed"
+        fi
     - name: Create HTML Report
       run: |
         formatted_details=$(echo '${{ github.event.inputs.sonar_project_details }}' | jq -r '.issues[] | {key, rule, severity, component, message, effort}' | jq -s .)
