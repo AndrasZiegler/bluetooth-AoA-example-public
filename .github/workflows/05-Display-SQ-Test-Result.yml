@@ -20,7 +20,7 @@ jobs:
     steps:
     - name: Parse and Display SonarQube Project Details
       run: |
-        echo "${{ github.event.inputs.sonar_project_details }}" | jq '.issues[] | {key, rule, severity, component, message, effort}'
+        echo '${{ toJson(github.event.inputs.sonar_project_details) }}' | jq '.issues[] | {key, rule, severity, component, message, effort}'
     - name: Check SonarQube Quality Gate Result
       run: |
         if [ "${{ github.event.inputs.sonar_quality_gate }}" == "failed" ]; then
@@ -30,4 +30,5 @@ jobs:
           echo "Quality Gate passed"
     - name: Create HTML Report
       run: |
-        echo "<html><body><h1>SonarQube Project Details</h1><pre>${{ github.event.inputs.sonar_project_details }}</pre><h2>Quality Gate Status: ${{ github.event.inputs.sonar_quality_gate }}</h2></body></html>" > report.html
+        formatted_details=$(echo '${{ toJson(github.event.inputs.sonar_project_details) }}' | jq '.issues[] | {key, rule, severity, component, message, effort}' | jq -s .)
+        echo "<html><body><h1>SonarQube Project Details</h1><pre>${formatted_details}</pre><h2>Quality Gate Status: ${{ github.event.inputs.sonar_quality_gate }}</h2></body></html>" > report.html
