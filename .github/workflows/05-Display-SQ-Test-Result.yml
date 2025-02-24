@@ -18,14 +18,16 @@ jobs:
   output-SQ-test-result:
     runs-on: ubuntu-latest
     steps:
-      - name: Check SonarQube Quality Gate Result
-        run: |
-          if [ -n "${{ github.event.inputs.sonar_project_details }}" ]; then
-            echo "SonarQube Project Details: ${{ github.event.inputs.sonar_project_details }}"
-          fi
-          if [ "${{ github.event.inputs.sonar_quality_gate }}" == "failed" ]; then
-            echo "Quality Gate failed"
-            exit 1
-          else
-            echo "Quality Gate passed"
-          fi
+    - name: Parse and Display SonarQube Project Details
+      run: |
+        echo "${{ github.event.inputs.sonar_project_details }}" | jq '.issues[] | {key, rule, severity, component, message, effort}'
+    - name: Check SonarQube Quality Gate Result
+      run: |
+        if [ "${{ github.event.inputs.sonar_quality_gate }}" == "failed" ]; then
+          echo "Quality Gate failed"
+          exit 1
+        else
+          echo "Quality Gate passed"
+    - name: Create HTML Report
+      run: |
+        echo "<html><body><h1>SonarQube Project Details</h1><pre>${{ github.event.inputs.sonar_project_details }}</pre><h2>Quality Gate Status: ${{ github.event.inputs.sonar_quality_gate }}</h2></body></html>" > report.html
