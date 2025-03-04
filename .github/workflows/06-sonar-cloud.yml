@@ -5,6 +5,13 @@ on:
       - create-SQ-receiver-action
   pull_request:
     types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+env:
+    ARCH: x86_64
+    POST_BUILD_EXE: "/opt/commander-cli/commander-cli"
+    ARM_GCC_DIR: "/opt/gcc-arm-none-eabi/"
+    ARM_GCC_URL: "https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz"
 
 jobs:
   build:
