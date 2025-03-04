@@ -24,7 +24,7 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: Trigger
-        run: echo "Triggered by ${{ github.event_name }} event"
+        run: echo "THIS IS ONLY A TRIGGER Triggered by ${{ github.event_name }} event"
       - name: Checkout
         uses: actions/checkout@v4.2.2
       - name: Install Dependencies
